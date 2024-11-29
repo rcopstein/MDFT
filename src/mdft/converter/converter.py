@@ -1,3 +1,4 @@
+import urllib
 from pathlib import Path
 from typing import List
 
@@ -14,7 +15,9 @@ class Converter:
         path = file.path
         if path.is_relative_to(base):
             path = path.relative_to(base)
-        return str(path)
+
+        path = urllib.parse.quote(str(path))
+        return path
 
     @classmethod
     def _to_md(
