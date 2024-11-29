@@ -1,6 +1,6 @@
-import urllib
 from pathlib import Path
 from typing import List
+from urllib.parse import quote
 
 from mdft.file import File
 from mdft.util import Options
@@ -16,7 +16,7 @@ class Converter:
         if path.is_relative_to(base):
             path = path.relative_to(base)
 
-        path = urllib.parse.quote(str(path))
+        path = quote(str(path))
         return path
 
     @classmethod
