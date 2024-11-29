@@ -1,12 +1,15 @@
 import re
-from pathlib import Path
-from typing import Tuple
+from typing import List, Optional, Tuple, Type, TypeVar
+
+OPTIONS_RE = r'(!)?([^\s=,]+)(?:=(?:"((?:\\.|[^"])*)"|([^,]+)))?'
 
 STR_INCLUDE_FILES = "include_files"
 STR_INCLUDE_ROOT = "include_root"
 STR_KEEP_LINE = "keep_line"
 STR_FILTER = "filter"
 STR_LINK = "link"
+
+T = TypeVar("T")
 
 
 class Options:
@@ -15,57 +18,54 @@ class Options:
     keep_line: bool = True
     filter: bool = True
     link: bool = True
-    index: int = 0
-    path: Path
+
+    @classmethod
+    def _process_option(cls, target: Type[T], modifier: str, value: str) -> T:
+        if target is bool:
+            value = target(value) if value else True
+            value = not value if modifier.startswith("!") else value
+        else:
+            if not value:
+                raise Exception("Expected value for option")
+
+            if modifier:
+                raise Exception("Unexpected modifier for option")
+
+            value = target(value)
+
+        return value
+
+    @classmethod
+    def _parse_option(cls, option: str) -> List[Tuple[str, str, str]]:
+        matches = re.findall(OPTIONS_RE, option)
+
+        # Match group 2 is the value if captured in quotes
+        # Match group 3 is the value otherwise
+        matches = [(m[0], m[1], m[2] or m[3]) for m in matches]
+
+        return matches
 
     @classmethod
     def parse(cls, options: str) -> "Options":
         result = Options()
-        result.path, options = parse_path_options(options)
+        options = cls._parse_option(options)
 
-        for option in options.split(","):
-            option, value = parse_option(option)
+        for option in options:
+            modifier = option[0]
+            name = option[1]
+            value = option[2]
 
-            if option == STR_INCLUDE_FILES:
-                result.include_files = value
-            elif option == STR_INCLUDE_ROOT:
-                result.include_root = value
-            elif option == STR_KEEP_LINE:
-                result.keep_line = value
-            elif option == STR_FILTER:
-                result.filter = value
-            elif option == STR_LINK:
-                result.link = value
-            elif option == "":
-                pass
+            if name == STR_INCLUDE_FILES:
+                result.include_files = cls._process_option(bool, modifier, value)
+            elif name == STR_INCLUDE_ROOT:
+                result.include_root = cls._process_option(bool, modifier, value)
+            elif name == STR_KEEP_LINE:
+                result.keep_line = cls._process_option(bool, modifier, value)
+            elif name == STR_FILTER:
+                result.filter = cls._process_option(bool, modifier, value)
+            elif name == STR_LINK:
+                result.link = cls._process_option(bool, modifier, value)
             else:
-                raise Exception(f"Unexpected option: {option}")
+                raise Exception(f"Unexpected option: {name}")
 
         return result
-
-
-def parse_path_options(line: str) -> Tuple[Path, str]:
-    PATH_OPTIONS_RE = r'(?:([^\s"]+)|"((?:\\.|[^"])*)")'
-    matches = re.finditer(PATH_OPTIONS_RE, line)
-    options = ""
-    path = "./"
-
-    matches = [match.group(1) or match.group(2) for match in matches]
-
-    if len(matches) == 1:
-        options = matches[0]
-
-    if len(matches) == 2:
-        options = matches[1]
-        path = matches[0]
-
-    if len(matches) > 2:
-        raise Exception("Unexpected parameter", matches[2])
-
-    return Path(path), options
-
-
-def parse_option(option: str) -> Tuple[str, bool]:
-    if option.startswith("!"):
-        return option[1:].lower(), False
-    return option.lower(), True

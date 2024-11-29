@@ -1,11 +1,11 @@
 import re
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from .line import Line
 from .options import Options
 
-PATH_OPTIONS_RE = r'(?:([^\s"]+)|"((?:\\.|[^"])*)")'
+PATH_OPTIONS_RE = r'^((?:"(?:\\"|[^"])*")|[^\s]+)(?: +(.*))?$'
 LINE_MATCHER = r"<!-- *mdft(?: +(.*))? *-->"
 
 
@@ -26,9 +26,9 @@ class Command:
 
     @classmethod
     def parse_command(cls, base: Path, line: str) -> "Command":
-        matches = cls._get_line_matches(line)
+        matches = cls._get_path_options(line)
 
-        options = Options.parse(matches[1]) if len(matches) == 2 else Options()
+        options = Options.parse(matches[1]) if matches[1] is not None else Options()
 
         path = Path(matches[0])
         if not path.is_absolute():
@@ -37,20 +37,19 @@ class Command:
         return Command(path, options)
 
     @classmethod
-    def _get_line_matches(cls, line: str) -> List[str]:
+    def _get_path_options(cls, line: str) -> Tuple[str, Optional[str]]:
         match = cls._match_command(line)
 
         if match is None:
             raise Exception("Invalid definition")
 
         content = match.group(1) or ""
-        matches = re.finditer(PATH_OPTIONS_RE, content)
-        matches = [match.group(1) or match.group(2) for match in matches]
+        match = re.match(PATH_OPTIONS_RE, content)
 
-        if len(matches) > 2 or len(matches) < 1:
+        if match is None:
             raise Exception("Invalid definition")
 
-        return matches
+        return (match.group(1), match.group(2))
 
     @classmethod
     def is_command(cls, line: str) -> bool:
