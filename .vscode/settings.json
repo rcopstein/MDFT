@@ -1,0 +1,13 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit"
+        },
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true
+    },
+    "explorer.excludeGitIgnore": true,
+    "explorer.compactFolders": false,
+}
