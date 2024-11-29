@@ -12,7 +12,7 @@ class FileScanner:
         for entry in os.scandir(parent.path):
             file = File.from_entry(entry)
 
-            if filter.does_filter(file.path):
+            if options.filter and filter.does_filter(file.path):
                 continue
 
             if file.is_dir:
