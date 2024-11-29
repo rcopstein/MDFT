@@ -19,6 +19,8 @@ class FileFilter:
 
         with open(path, "r+") as file:
             patterns = file.read().splitlines()
+            patterns.append(".git/")
+
             result.filters = PathSpec.from_lines("gitwildmatch", patterns)
 
         return result
