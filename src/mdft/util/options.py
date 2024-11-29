@@ -5,6 +5,7 @@ OPTIONS_RE = r'(!)?([^\s=,]+)(?:=(?:"((?:\\.|[^"])*)"|([^,]+)))?'
 
 STR_INCLUDE_FILES = "include_files"
 STR_INCLUDE_ROOT = "include_root"
+STR_MAX_DEPTH = "max_depth"
 STR_KEEP_LINE = "keep_line"
 STR_FILTER = "filter"
 STR_LINK = "link"
@@ -13,6 +14,7 @@ T = TypeVar("T")
 
 
 class Options:
+    max_depth: Optional[int] = None
     include_files: bool = True
     include_root: bool = False
     keep_line: bool = True
@@ -61,6 +63,8 @@ class Options:
                 result.include_root = cls._process_option(bool, modifier, value)
             elif name == STR_KEEP_LINE:
                 result.keep_line = cls._process_option(bool, modifier, value)
+            elif name == STR_MAX_DEPTH:
+                result.max_depth = cls._process_option(int, modifier, value)
             elif name == STR_FILTER:
                 result.filter = cls._process_option(bool, modifier, value)
             elif name == STR_LINK:

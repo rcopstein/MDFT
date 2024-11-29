@@ -8,7 +8,10 @@ from .file_filter import FileFilter
 
 class FileScanner:
     @classmethod
-    def _scan(cls, parent: File, options: Options, filter: FileFilter):
+    def _scan(cls, parent: File, options: Options, filter: FileFilter, depth: int):
+        if options.max_depth and depth >= options.max_depth:
+            return
+
         for entry in os.scandir(parent.path):
             file = File.from_entry(entry)
 
@@ -16,7 +19,7 @@ class FileScanner:
                 continue
 
             if file.is_dir:
-                cls._scan(file, options, filter)
+                cls._scan(file, options, filter, depth + 1)
 
             if options.include_files or file.is_dir:
                 parent.add_child(file)
@@ -30,5 +33,5 @@ class FileScanner:
             raise Exception("Provided path must be a directory")
 
         parent = File(blueprint.path.name, blueprint.path.parent, True)
-        cls._scan(parent, blueprint.options, filter)
+        cls._scan(parent, blueprint.options, filter, 0)
         return parent
