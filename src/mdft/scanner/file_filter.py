@@ -4,7 +4,7 @@ from pathspec import PathSpec
 
 
 class FileFilter:
-    filters: PathSpec = []
+    filters: PathSpec = PathSpec()
 
     def does_filter(self, path: Path) -> bool:
         path_str = str(path)
