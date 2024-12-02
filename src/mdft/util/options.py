@@ -3,6 +3,7 @@ from typing import List, Optional, Tuple, Type, TypeVar
 
 OPTIONS_RE = r'(!)?([^\s=,]+)(?:=(?:"((?:\\.|[^"])*)"|([^,]+)))?'
 
+STR_INCLUDE_HIDDEN = "include_hidden"
 STR_INCLUDE_FILES = "include_files"
 STR_INCLUDE_ROOT = "include_root"
 STR_MAX_DEPTH = "max_depth"
@@ -15,6 +16,7 @@ T = TypeVar("T")
 
 class Options:
     max_depth: Optional[int] = None
+    include_hidden: bool = False
     include_files: bool = True
     include_root: bool = False
     keep_line: bool = True
@@ -57,7 +59,9 @@ class Options:
             name = option[1]
             value = option[2]
 
-            if name == STR_INCLUDE_FILES:
+            if name == STR_INCLUDE_HIDDEN:
+                result.include_hidden = cls._process_option(bool, modifier, value)
+            elif name == STR_INCLUDE_FILES:
                 result.include_files = cls._process_option(bool, modifier, value)
             elif name == STR_INCLUDE_ROOT:
                 result.include_root = cls._process_option(bool, modifier, value)

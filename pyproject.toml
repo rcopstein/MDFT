@@ -1,6 +1,6 @@
 [project]
 name = "mdft"
-version = "0.1.5"
+version = "0.1.6"
 readme = "README.md"
 requires-python = ">=3.9"
 description = "Package for generating file trees in Markdown"

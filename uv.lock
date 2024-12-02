@@ -290,7 +290,7 @@ wheels = [
 
 [[package]]
 name = "mdft"
-version = "0.1.5"
+version = "0.1.6"
 source = { editable = "." }
 dependencies = [
     { name = "pathspec" },
@@ -335,6 +335,7 @@ wheels = [
 name = "nh3"
 version = "0.2.19"
 source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1d/32/3b8d8471d006333bac3175ad37402414d985ed3f8650a01a33e0e86b9824/nh3-0.2.19.tar.gz", hash = "sha256:790056b54c068ff8dceb443eaefb696b84beff58cca6c07afd754d17692a4804", size = 17327 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e8/1d/cbd75a2313d96cd3903111667d3d07548fb45c8ecf5c315f37a8f6c202fa/nh3-0.2.19-cp313-cp313t-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:ec9c8bf86e397cb88c560361f60fdce478b5edb8b93f04ead419b72fbe937ea6", size = 1205181 },
     { url = "https://files.pythonhosted.org/packages/f0/30/8e9ec472ce575fa6b98935920c91df637bf9342862bd943745441aec99eb/nh3-0.2.19-cp313-cp313t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d0adf00e2b2026fa10a42537b60d161e516f206781c7515e4e97e09f72a8c5d0", size = 739174 },

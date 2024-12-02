@@ -18,6 +18,9 @@ class FileScanner:
             if options.filter and filter.does_filter(file.path):
                 continue
 
+            if file.is_hidden and not options.include_hidden:
+                continue
+
             if file.is_dir:
                 cls._scan(file, options, filter, depth + 1)
 

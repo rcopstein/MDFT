@@ -40,14 +40,15 @@ The _Path_ is relative to the `.md` file. The file tree will include all of the 
 ### Options
 The _Options_ are comma-separated values that customize the output, but may be ommited.
 
-| Option        | Description                                   |   Type   | Default  |
-|:--------------|:----------------------------------------------|:--------:|:--------:|
-| filter        | Exclude files listed in `.gitignore`          |   bool   |   True   |
-| include_files | Include files (not just directories)          |   bool   |   True   |
-| include_root  | Include the root folder in the tree           |   bool   |  False   |
-| keep_line     | Keep the definition line in the output file   |   bool   |   True   |
-| link          | Create links to the files                     |   bool   |   True   |
-| max_depth     | Maximum scan depth from the root folder       |   int    |   None   |
+| Option         | Description                                   |   Type   | Default  |
+|:---------------|:----------------------------------------------|:--------:|:--------:|
+| filter         | Exclude files listed in `.gitignore`          |   bool   |   True   |
+| include_files  | Include files (not just directories)          |   bool   |   True   |
+| include_hidden | Include hidden files                          |   bool   |  False   |
+| include_root   | Include the root folder in the tree           |   bool   |  False   |
+| keep_line      | Keep the definition line in the output file   |   bool   |   True   |
+| link           | Create links to the files                     |   bool   |   True   |
+| max_depth      | Maximum scan depth from the root folder       |   int    |   None   |
 
 Values for each option are specified in the form of `option=value`, e.g. `max_depth=2`. For `bool` values, you can ommit the value to make it `True`, or prepend a `!` to make it `False`, e.g. `!include_files`.
 

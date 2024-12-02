@@ -4,9 +4,12 @@ from pathspec import PathSpec
 
 
 class FileFilter:
-    filters: PathSpec = PathSpec()
+    filters: PathSpec = None
 
     def does_filter(self, path: Path) -> bool:
+        if self.filters is None:
+            return False
+
         path_str = str(path)
         if path.is_dir():
             path_str += "/"
@@ -19,8 +22,6 @@ class FileFilter:
 
         with open(path, "r+") as file:
             patterns = file.read().splitlines()
-            patterns.append(".git/")
-
             result.filters = PathSpec.from_lines("gitwildmatch", patterns)
 
         return result
